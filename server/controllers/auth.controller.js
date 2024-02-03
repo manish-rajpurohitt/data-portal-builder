@@ -33,7 +33,7 @@ authController.signup = catchAsync(
 
         let htmlTemplate = emailHelper.generateHTMLTemplate({
           user: fullname,
-          verificationLink: process.env.FRONTEND_HOST + "/" + token,
+          verificationLink: (process.env.ENVIRONMENT === "LOCAL" ? "http://localhost:5173" : process.env.FRONTEND_HOST) + "/verifyEmail/" + token,
           companyName: process.env.COMPANY_NAME
         }, "USER_EMAIL_VERIFICATION_TEMPLATE");
 
@@ -68,7 +68,7 @@ authController.login = catchAsync(
           await User.findOneAndUpdate({_id: user._id}, {token, tokenExpiryDate: new Date(new Date().getTime() + 12 * 60 * 60 * 1000)});
           let htmlTemplate = emailHelper.generateHTMLTemplate({
             user: user.fullname,
-            verificationLink: process.env.FRONTEND_HOST + "/" + token,
+            verificationLink: (process.env.ENVIRONMENT === "LOCAL" ? "http://localhost:5173" : process.env.FRONTEND_HOST) + "/verifyEmail/" + token,
             companyName: process.env.COMPANY_NAME
           }, "USER_EMAIL_VERIFICATION_TEMPLATE");
   
@@ -149,7 +149,7 @@ authController.forgotPassword = catchAsync(
 
         let htmlTemplate = emailHelper.generateHTMLTemplate({
           user: user.fullname,
-          passwordResetLink: process.env.FRONTEND_HOST + "/" + token,
+          passwordResetLink: (process.env.ENVIRONMENT === "LOCAL" ? "http://localhost:5173" : process.env.FRONTEND_HOST) + "/resetPassword/" + token,
           companyName: process.env.COMPANY_NAME
         }, "USER_FORGOT_PASSWORD_TEMPLATE");
 

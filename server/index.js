@@ -5,6 +5,7 @@ import connect from "./models/config/index.js";
 import routes from "./routes/index.js";
 
 const app = express();
+app.use(cors());
 connect();
 app.use(express.json());
 
