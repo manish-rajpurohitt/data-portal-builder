@@ -1,0 +1,24 @@
+.attributes-page {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 1%;
+}
+
+.attributes-add {
+    display: flex;
+    justify-content: space-between;
+    margin-right: 2%;
+}
+
+.attributes-add>button {
+
+    margin: 1%;
+}
+
+.attributes-list {
+    border: black solid;
+    width: 98%;
+    height: 88%;
+}

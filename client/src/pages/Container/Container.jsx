@@ -8,7 +8,6 @@ import Dashboard from '../Dashboard/Dashboard'
 function Container({ selectedItem }) {
     return (
         <div className="main-content">
-            <h1>{selectedItem.charAt(0).toUpperCase() + selectedItem.slice(1)}</h1>
             {selectedItem === 'Dashboard' && <Dashboard />}
             {selectedItem === 'Attributes' && <Attributes />}
             {selectedItem === 'Models' && <Models />}

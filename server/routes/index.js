@@ -1,10 +1,12 @@
 import express from "express";
 import authRouter from "./auth.route.js";
+import attributeRouter from "./attributes.route.js";
 
 const router = express.Router();
 
 const routesMapping = [
   { path: "/auth", route: authRouter },
+  { path: "/attribute", route: attributeRouter },
 ];
 
 routesMapping.forEach((rm) => {
