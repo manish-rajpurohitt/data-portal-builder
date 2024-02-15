@@ -1,8 +1,12 @@
-import React from 'react'
+import React from 'react';
+import Temp from "../../Temp"
+import "./Popup.css"
 
 function Dashboard() {
     return (
-        <div>Dashboard</div>
+        <div>
+            <Temp />
+        </div>
     )
 }
 

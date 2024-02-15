@@ -66,7 +66,7 @@ const resetPassword = async (token, payload) => {
 
 const emailVerification = async (token, payload) => {
     try {
-        let response = await ApiService.getData('api/v1/auth/verify_email_by_token?verify_token=' + token, payload);
+        let response = await ApiService.getData('api/v1/auth/verify_email_by_token?verify_token=' + token);
         if (response.hasError) {
             toast.error(response.message);
         } else {
@@ -79,7 +79,7 @@ const emailVerification = async (token, payload) => {
     }
 }
 
-export {
+export default {
     loginUser,
     registerUser, resetPassword, forgotPassword, emailVerification
 }

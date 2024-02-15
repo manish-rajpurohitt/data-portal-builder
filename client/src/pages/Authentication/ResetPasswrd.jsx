@@ -3,8 +3,7 @@ import toast from 'react-hot-toast';
 import authHelper from '../../helpers/authHelper';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
-import { resetPassword } from '../../services/auth.service';
-
+import { authService } from '../../services';
 
 function ResetPasswrd() {
 
@@ -22,7 +21,7 @@ function ResetPasswrd() {
             } else if (data.password !== data.confirmPassword) {
                 toast.error("Passwords should match.");
             } else {
-                let res = await resetPassword(token, { password: data.password });
+                let res = await authService.resetPassword(token, { password: data.password });
                 if (res.isSuccess) {
                     navigate("/login");
                 }

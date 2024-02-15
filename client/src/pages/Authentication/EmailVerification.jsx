@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useEffect } from 'react'
 import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom'
-import { emailVerification } from '../../services/auth.service';
+import authService from '../../services/auth.service';
 
 function EmailVerification() {
 
@@ -10,7 +10,7 @@ function EmailVerification() {
     const [msg, setMsg] = React.useState("Verifying your email....");
     const verifyToken = async () => {
         try {
-            let res = await emailVerification(token);
+            let res = await authService.emailVerification(token);
 
             if (res.isSuccess) {
                 setMsg(res.message);

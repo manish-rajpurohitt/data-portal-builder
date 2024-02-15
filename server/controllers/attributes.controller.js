@@ -5,6 +5,8 @@ import ENUMS from "../models/enums.js";
 
 
 let attributeController = {};
+
+
 attributeController.getAllAttributes = catchAsync(
     async (req, res, next) => {
         try {

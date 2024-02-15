@@ -3,7 +3,8 @@ import React from 'react'
 import { toast } from "react-hot-toast";
 import { useNavigate } from 'react-router-dom';
 import localStorageHelper from '../../helpers/localstorage.helper';
-import { registerUser } from '../../services/auth.service';
+import { authService } from '../../services';
+
 export default function Register() {
 
   const [user, setUser] = React.useState({
@@ -25,12 +26,11 @@ export default function Register() {
       } else if (!matchPasswordCriteria(user.password)) {
         return;
       } else {
-        let response = await registerUser({ fullname: user.fullname, password: user.password, email: user.email });
+        let response = await authService.registerUser({ fullname: user.fullname, password: user.password, email: user.email });
         if (response.isSuccess) {
           navigate("/login");
         } else {
           console.log(response);
-          //          toast.error(response.data.message);
         }
       }
     }
@@ -69,8 +69,8 @@ export default function Register() {
   }, [])
 
   return (
-    <div>
-      <form onSubmit={registerUserr} className='register'>
+    <div className='register'>
+      <form onSubmit={registerUserr}>
         <label>Email</label>
         <input typ="text" placeholder='Enter email..' value={user.email} onChange={(e) => setUser({ ...user, email: e.target.value })} />
         <label>Full Name</label>

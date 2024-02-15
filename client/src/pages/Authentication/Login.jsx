@@ -4,9 +4,11 @@ import toast from 'react-hot-toast';
 import axios from 'axios';
 import { Link, useNavigate } from "react-router-dom";
 import localStorageHelper from '../../helpers/localstorage.helper';
-import { loginUser } from "../../services/auth.service";
+import { authService } from '../../services';
 
 export default function Login(props) {
+
+    let { setIsAuthenticated } = props;
 
     const [user, setUser] = React.useState({
         email: "",
@@ -23,10 +25,10 @@ export default function Login(props) {
             } else if (user.password === null || user.password === "") {
                 toast.error("Password field should not be empty.");
             } else {
-                let respnse = await loginUser(user);
+                let respnse = await authService.loginUser(user);
                 if (respnse.isSuccess) {
                     localStorageHelper.addAuthData(respnse.data);
-                    props.setIsAuthenticated(true);
+                    setIsAuthenticated(true);
                     navigate("/main");
                 }
             }

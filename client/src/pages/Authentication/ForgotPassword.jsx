@@ -3,7 +3,7 @@ import toast from 'react-hot-toast';
 import authHelper from '../../helpers/authHelper';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { forgotPassword } from '../../services/auth.service';
+import authService from '../../services/auth.service';
 
 
 function ForgotPassword() {
@@ -15,7 +15,7 @@ function ForgotPassword() {
             if (!authHelper.isValidEmail(email)) {
                 toast.error("Enter valid email id.");
             } else {
-                let res = await forgotPassword({ email });
+                let res = await authService.forgotPassword({ email });
 
                 if (res.data.isSuccess) {
                     navigate("/login");

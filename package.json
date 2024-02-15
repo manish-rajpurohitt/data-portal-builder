@@ -5,6 +5,8 @@
     "start:server": "cd server && npm run start"
   },
   "dependencies": {
+    "@material-tailwind/react": "^2.1.8",
+    "concurrently": "^8.2.2",
     "pm2": "^5.3.1"
   }
 }

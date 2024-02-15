@@ -1,44 +1,46 @@
 import React from 'react'
 import "./Attributes.css"
-import JsonTable from '../JsonTableHelper'
+
 import { MdModeEdit } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
+import { Table } from '../Shared/Table';
+import Popup from '../Shared/Popup';
+import { useEffect } from 'react';
+import { attributeService } from '../../services';
 
 const actions = [{
     name: "Edit",
-    element: <div onClick={() => handleEdit()}><MdModeEdit /></div>
+    element: <div><MdModeEdit /></div>
 }, {
     name: "Delete",
-    element: <div onClick={() => handleDelete()}><MdDelete /></div>
+    element: <div ><MdDelete /></div>
 }]
 
 function Attributes() {
-    let attributes = [{
-        name: "Att1",
-        type: "STRING",
-        subType: null,
-        actions
-    }, {
-        name: "Att2",
-        type: "LIST",
-        actions,
-        subType: "INTEGER"
-    }, {
-        name: "Att3",
-        actions,
-        type: "GEOLOCATION",
-        subType: null
-    }, {
-        name: "Att4",
-        type: "STRING",
-        actions,
-        subType: null
-    }, {
-        name: "Att5",
-        actions,
-        type: "INTEGER",
-        subType: null
-    }]
+    let [attr, setAttr] = React.useState([]);
+
+    useEffect(() => {
+        let setAttributesData = async () => {
+            let data = await attributeService.getAllAttributes();
+
+            if (data?.attributes && data.attributes?.length > 0) {
+                setAttr(data.attributes);
+            }
+        }
+
+        setAttributesData();
+    }, [])
+
+    const [popupData, setPopupData] = React.useState({
+        showPopup: false,
+        popupType: ""
+    });
+
+    const setPopup = (val, type) => {
+        console.log(val, type)
+        setPopupData({ ...popupData, showPopup: val, popupType: type });
+    };
+
     return (
         <div className='attributes-page'>
             <div className='attributes-add'>
@@ -48,8 +50,10 @@ function Attributes() {
             </div>
 
             <div className='attributes-list'>
-                <JsonTable data={attributes} />
+                <Table setPopup={setPopup} data={attr} />
             </div>
+
+            {popupData.showPopup && <Popup setPopup={setPopup} title={popupData.popupType} />}
         </div>
     )
 }

@@ -1,6 +1,6 @@
 import authMiddleware from "../middlewares/validateUser.middleware.js";
 import express from "express";
-const router = express.Router();
+const                                                                                                       router = express.Router();
 import attributeController from "../controllers/attributes.controller.js";
 
 
