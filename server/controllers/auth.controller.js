@@ -4,6 +4,7 @@ import User from "../models/user.model.js";
 import responseHelper from "../helpers/response.helper.js";
 import tokenHelper from "../service/token.service.js";
 import emailHelper from "../helpers/emailHelper.js";
+import ENUMS from "../models/enums.js";
 
 
 let authController = {};
@@ -35,7 +36,7 @@ authController.signup = catchAsync(
         companyName: process.env.COMPANY_NAME
       }, "USER_EMAIL_VERIFICATION_TEMPLATE");
 
-      emailHelper.sendEmail(email, "Account Verification", "", htmlTemplate);
+      emailHelper.sendEmail(email, ENUMS.EmailTypesEnum.ACCOUNT_VERIFICATION, "", htmlTemplate);
 
       user.password = null;
       user.token = null;
@@ -70,7 +71,7 @@ authController.login = catchAsync(
             companyName: process.env.COMPANY_NAME
           }, "USER_EMAIL_VERIFICATION_TEMPLATE");
 
-          emailHelper.sendEmail(user.email, "Account Verification", "", htmlTemplate);
+          emailHelper.sendEmail(user.email, ENUMS.EmailTypesEnum.ACCOUNT_VERIFICATION, "", htmlTemplate);
         }
         return responseHelper.sendResponse(res, 400, "Verification email sent! Please check your email and verify your account.", null);
       }
@@ -151,7 +152,7 @@ authController.forgotPassword = catchAsync(
         companyName: process.env.COMPANY_NAME
       }, "USER_FORGOT_PASSWORD_TEMPLATE");
 
-      emailHelper.sendEmail(email, "Reset Password", "", htmlTemplate);
+      emailHelper.sendEmail(email, ENUMS.EmailTypesEnum.RESET_PASSWORD, "", htmlTemplate);
 
       return responseHelper.sendResponse(res, 200, "Reset Password link will be sent if user with provided email exists!");
     } catch (err) {

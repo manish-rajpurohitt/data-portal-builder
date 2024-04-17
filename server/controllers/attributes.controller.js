@@ -53,24 +53,34 @@ attributeController.createAttribute = catchAsync(
                 return responseHelper.sendResponse(res, 400, "Type should be one of " + ENUMS.AttributeTypesList.toString(), null);
             }
 
-            let attribute = await Attribute.create({ userId: req.user.id, ...req.body });
+            let data = await Attribute.findOne({name: req.body.name, userId: req.user.id, type: req.body.type});
+
+            if(data)
+                return responseHelper.sendResponse(res, 400, "Attribute with similar properties already present.", null);
+
+            let body = {name: req.body.name, type: req.body.type, userId: req.user.id};
+
+            if(req.body.type === "LIST" || req.body.type === "MAP") body.subType = req.body.subType;
+            if(req.body.type === "MAP") body.subValue = req.body.subValue;
+
+            let attribute = await Attribute.create( body);
 
             return responseHelper.sendResponse(res, 200, "Attribute Created Successfully.", {
                 attribute
             });
 
         } catch (err) {
-            console.log(err);
-            return responseHelper.sendResponse(res, 500, "Internal Server Error !", null);
+            console.log(err.message);
+            return responseHelper.sendResponse(res, 500, err.message, null);
         }
     }
-);
+)
 
 attributeController.updateAttribute = catchAsync(
     async (req, res, next) => {
         try {
-
-            let attribute = await Attribute.findOne({ id: req.params.id, userId: req.user.id });
+            console.log(req.body, req.params.id )
+            let attribute = await Attribute.findOne({ _id: req.params.id.toString(), userId: req.user.id });
 
             if (!attribute) {
                 return responseHelper.sendResponse(res, 400, "Attribute with provided id not found ", null);
@@ -84,7 +94,12 @@ attributeController.updateAttribute = catchAsync(
                 return responseHelper.sendResponse(res, 400, "Type should be one of " + ENUMS.AttributeTypesList.toString(), null);
             }
 
-            let updated = await Attribute.updateOne({ userId: req.user.id, id: req.params.id }, { ...req.body });
+            let body = {name: req.body.name, type: req.body.type, userId: req.user.id, subType: null, subValue: null};
+
+            if(req.body.type === "LIST" || req.body.type === "MAP") body.subType = req.body.subType;
+            if(req.body.type === "MAP") body.subValue = req.body.subValue;
+
+            let attr = await Attribute.updateOne({_id: req.params.id}, body);
 
             return responseHelper.sendResponse(res, 200, "Attribute Updated Successfully.", {});
 
@@ -99,14 +114,14 @@ attributeController.deleteAttribute = catchAsync(
     async (req, res, next) => {
         try {
 
-            let attribute = await Attribute.findOne({ id: req.params.id, userId: req.user.id });
+            let attribute = await Attribute.findOne({ _id: req.params.id, userId: req.user.id });
 
             if (!attribute) {
                 return responseHelper.sendResponse(res, 400, "Attribute with provided id not found ", null);
             }
 
             //check if being used
-            let deleted = await Attribute.remove({ userId: req.user.id, id: req.params.id });
+            let deleted = await Attribute.deleteOne({ userId: req.user.id, _id: req.params.id });
 
             return responseHelper.sendResponse(res, 200, "Attribute Deleted Successfully.", {});
 

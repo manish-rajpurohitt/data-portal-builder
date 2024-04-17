@@ -15,7 +15,14 @@ let AttributeSchema = mongoose.Schema({
         type: String,
         enum: ENUMS.AttributeTypesList,
         required: function () {
-            return this.type === 'LIST';
+            return this.type === 'LIST' || this.type === 'MAP';
+        },
+    },
+    subValue: {
+        type: String,
+        enum: ENUMS.AttributeTypesList,
+        required: function () {
+            return this.type === 'MAP';
         },
     },
     userId: {

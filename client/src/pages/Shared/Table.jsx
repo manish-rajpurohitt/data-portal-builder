@@ -1,15 +1,26 @@
 import { Card, Typography } from "@material-tailwind/react";
 import { MdDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
+import { attributeService } from "../../services";
+import React from "react";
 
 
 
-let TABLE_HEAD = ["Name", "Type", "Sub Type", "Actions"];
+let TABLE_HEAD = ["Name", "Type", "Sub Type", "Sub Value", "Actions"];
 
 let TABLE_ROWS = [];
 
 export function Table(props) {
   let { setPopup, data } = props;
+  const [showWarning , setShowWarning] = React.useState(false);
+  const [deleteAttrIdx, setDeleteAttrIdx] = React.useState();
+
+  const deleteAttribute = async () => {
+    let res = await attributeService.deleteAttribute(data[deleteAttrIdx]._id);
+    setShowWarning(false);
+    setDeleteAttrIdx(null);
+    setPopup(false, "DELETE")
+  }
   TABLE_ROWS = data;
   return (
     <Card className="h-full w-full overflow-scroll">
@@ -33,7 +44,7 @@ export function Table(props) {
           </tr>
         </thead>
         <tbody>
-          {TABLE_ROWS.map(({ name, type, subType }, index) => {
+          {TABLE_ROWS.map(({ name, type, subType, subValue }, index) => {
             const isLast = index === TABLE_ROWS.length - 1;
             const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
 
@@ -66,11 +77,20 @@ export function Table(props) {
                     {subType ? subType : "-"}
                   </Typography>
                 </td>
+                <td className={classes}>
+                  <Typography
+                    variant="small"
+                    color="blue-gray"
+                    className="font-normal"
+                  >
+                    {subValue ? subValue : "-"}
+                  </Typography>
+                </td>
                 <td className={classes} style={{ height: "10px" }}>
                   <div className="table-actions">
 
-                    <MdDelete size={30} title="Delete" cursor={"pointer"} />
-                    <FaEdit size={30} title="Edit" cursor={"pointer"} onClick={() => setPopup(true, "EDIT")} />
+                    <MdDelete size={30} title="Delete" cursor={"pointer"} onClick={() => {setShowWarning(true); setDeleteAttrIdx(index); return;}} />
+                    <FaEdit size={30} title="Edit" cursor={"pointer"} onClick={() => setPopup(true, "EDIT", index)} />
                   </div>
 
                 </td>
@@ -79,6 +99,28 @@ export function Table(props) {
           })}
         </tbody>
       </table>
+      {showWarning ? 
+      <>
+        <div className="delete-sure-popup" >
+          <div className="popup-inner" style={{width: '25%'}}>
+            <div 
+                style={{marginLeft: "25%",marginRight: '28%', padding:'5%'}}
+            >
+              <Typography
+                variant="small"
+                color="blue-gray"
+                className="font-normal"
+                style={{marginLeft: "20%"}}
+              > Are you sure ?</Typography>
+              <div style={{display: "flex", justifyContent: "space-between"}}>
+                <button onClick={deleteAttribute}>DELETE</button>
+                <button onClick={() => setShowWarning(false)}>CANCEL</button>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+      </> : <></>}
     </Card>
   );
 }

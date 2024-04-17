@@ -71,15 +71,29 @@ export default function Register() {
   return (
     <div className='register'>
       <form onSubmit={registerUserr}>
-        <label>Email</label>
-        <input typ="text" placeholder='Enter email..' value={user.email} onChange={(e) => setUser({ ...user, email: e.target.value })} />
-        <label>Full Name</label>
+        <div className='inp-comp'>
+          <label>Email:</label>
+          <input typ="text" placeholder='Enter email..' value={user.email} onChange={(e) => setUser({ ...user, email: e.target.value })} />
+        </div>
+        
+        <div className='inp-comp'>
+        <label>Full Name:</label>
         <input typ="text" placeholder='Full Name..' value={user.fullname} onChange={(e) => setUser({ ...user, fullname: e.target.value })} />
-        <label>Password</label>
+        </div>
+        
+        <div className='inp-comp'>
+        <label>Password:</label>
         <input typ="pasword" placeholder='Enter Password..' value={user.password} onChange={(e) => setUser({ ...user, password: e.target.value })} />
-        <label>Confirm Password</label>
+        </div>
+        
+        <div className='inp-comp'>
+        <label>Confirm Password:</label>
         <input typ="password" placeholder='Confirm Pasword..' value={user.confirmPassword} onChange={(e) => setUser({ ...user, confirmPassword: e.target.value })} />
+        </div>
+        
+        <div className='inp-comp'>
         <button type="submit">Submit</button>
+        </div>
       </form>
     </div>
   )

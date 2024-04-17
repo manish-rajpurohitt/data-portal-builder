@@ -7,6 +7,7 @@ import { Table } from '../Shared/Table';
 import Popup from '../Shared/Popup';
 import { useEffect } from 'react';
 import { attributeService } from '../../services';
+import AddEditAttributePopup from './AddEditAttributePopup';
 
 const actions = [{
     name: "Edit",
@@ -18,6 +19,7 @@ const actions = [{
 
 function Attributes() {
     let [attr, setAttr] = React.useState([]);
+    let [updateDataIndex, setUpdateDataIndex] = React.useState(0);
 
     useEffect(() => {
         let setAttributesData = async () => {
@@ -36,24 +38,34 @@ function Attributes() {
         popupType: ""
     });
 
-    const setPopup = (val, type) => {
-        console.log(val, type)
+    const setPopup = async (val, type, index) => {
+        if(type === "EDIT" && val){
+            setUpdateDataIndex(index);
+        }
+
         setPopupData({ ...popupData, showPopup: val, popupType: type });
+        if(val === false){
+            let data = await attributeService.getAllAttributes();
+
+            if (data?.attributes && data.attributes?.length >= 0) {
+                setAttr(data.attributes);
+            }
+        }
     };
 
     return (
-        <div className='attributes-page'>
-            <div className='attributes-add'>
+        <div className='items-page'>
+            <div className='item-add'>
                 <h1>List Of Attributes</h1>
 
-                <button>Add Attribute</button>
+                <button onClick={setPopup}>Add Attribute</button>
             </div>
 
-            <div className='attributes-list'>
+            <div className='items-list'>
                 <Table setPopup={setPopup} data={attr} />
             </div>
 
-            {popupData.showPopup && <Popup setPopup={setPopup} title={popupData.popupType} />}
+            {popupData.showPopup && <AddEditAttributePopup setPopup={setPopup} title={popupData.popupType} data={attr[updateDataIndex]} />}
         </div>
     )
 }
